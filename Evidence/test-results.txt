@@ -1,0 +1,65 @@
+StudyDock verification excerpts: 2 October 2026
+Xcode 27.0; iPhone 17 Pro simulator, iOS 26.5
+
+26 MOCK UNIT TESTS
+Test Case '-[StudyDockTests.StudyUseCaseTests testAnAssessmentCannotBeMarkedSubmittedTwice]' passed (0.002 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testASecondSubjectCannotReuseTheSameCodeWithDifferentCase]' passed (0.001 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testAssessmentCannotBelongToAnUnknownSubject]' passed (0.001 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testAssessmentNeedsAConcreteNextStudyStep]' passed (0.002 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testBlankAssessmentTitleIsRejected]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testConfirmedAssessmentIsSavedUnderItsSubject]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testDeadlineRevisionRequiresFreshConfirmation]' passed (0.001 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testEightThousandCharacterReferenceIsAcceptedAtTheBoundary]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testEmptySharedReferenceIsRejected]' passed (0.001 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testMissingAssessmentCannotBeMarkedSubmitted]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testNonWebAssignmentLinksAreRejected]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testNonWebSharedLinkIsRejected]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testOverdueAssessmentCanBeRecordedInsteadOfHidden]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testOversizedReferenceIsRejectedWithoutSaving]' passed (0.002 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testPlainTextReferenceCanBeCapturedWithoutALink]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testRecordingSubmissionPersistsItsTimestamp]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testRegisteringSubjectTrimsAndNormalisesItsCode]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testRepositorySaveFailureDoesNotCreateAnAssessment]' passed (0.001 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testRetryingASharedReferenceReusesTheSavedAssessment]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testRevisedDeadlineAndNextStepAreSavedTogether]' passed (0.004 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testSubjectWithoutNameIsNotRegistered]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testSubmittedAssessmentCannotBeRevised]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testUnconfirmedDeadlineCannotEnterThePlanner]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testWebReferenceIsCapturedWithItsOriginalSource]' passed (0.000 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testWorkloadIncludesTheCutoffAndOverdueButExcludesSubmittedAndLaterWork]' passed (0.002 seconds).
+Test Case '-[StudyDockTests.StudyUseCaseTests testZeroDayWorkloadWindowIsRejected]' passed (0.001 seconds).
+Executed 26 tests, with 0 failures (0 unexpected) in 0.022 (0.035) seconds
+Executed 26 tests, with 0 failures (0 unexpected) in 0.022 (0.035) seconds
+Executed 26 tests, with 0 failures (0 unexpected) in 0.022 (0.035) seconds
+** TEST SUCCEEDED **
+
+CREATE / RELAUNCH / SUBMIT UI SCENARIO
+Test Case '-[StudyDockUITests.StudyDockWorkflowTests testStudentCanPlanAnAssessmentRelaunchAndRecordSubmission]' passed (30.826 seconds).
+Executed 1 test, with 0 failures (0 unexpected) in 30.826 (30.827) seconds
+Executed 1 test, with 0 failures (0 unexpected) in 30.826 (30.827) seconds
+Executed 1 test, with 0 failures (0 unexpected) in 30.826 (30.829) seconds
+** TEST SUCCEEDED **
+
+EXAMPLE WORKLOAD UI SCENARIO
+Test Case '-[StudyDockUITests.StudyDockWorkflowTests testExampleSemesterDisplaysUpcomingAndOverdueAssessments]' passed (11.219 seconds).
+Executed 1 test, with 0 failures (0 unexpected) in 11.219 (11.220) seconds
+Executed 1 test, with 0 failures (0 unexpected) in 11.219 (11.221) seconds
+Executed 1 test, with 0 failures (0 unexpected) in 11.219 (11.222) seconds
+** TEST SUCCEEDED **
+
+REAL SAFARI CAPTURE IMPORT UI SCENARIO
+Test Case '-[StudyDockUITests.StudyDockWorkflowTests testSharedSafariReferenceCanBeConfirmedAndRemovedFromInbox]' passed (20.336 seconds).
+Executed 1 test, with 0 failures (0 unexpected) in 20.336 (20.337) seconds
+Executed 1 test, with 0 failures (0 unexpected) in 20.336 (20.338) seconds
+Executed 1 test, with 0 failures (0 unexpected) in 20.336 (20.339) seconds
+** TEST SUCCEEDED **
+
+SUBMISSION AND WORKLOAD / WIDGET REFRESH SCENARIO
+Test Case '-[StudyDockUITests.StudyDockWorkflowTests testSubmittingOverdueAssessmentRemovesItFromActiveWorkload]' passed (17.454 seconds).
+Executed 1 test, with 0 failures (0 unexpected) in 17.454 (17.455) seconds
+Executed 1 test, with 0 failures (0 unexpected) in 17.454 (17.456) seconds
+Executed 1 test, with 0 failures (0 unexpected) in 17.454 (17.457) seconds
+** TEST SUCCEEDED **
+
+UNSIGNED RELEASE DEVICE BUILD
+** BUILD SUCCEEDED **
