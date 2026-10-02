@@ -2,8 +2,27 @@ import XCTest
 
 /// Run on a dedicated clean simulator: these tests create real, clearly labelled test records.
 final class StudyDockWorkflowTests: XCTestCase {
+    func testExampleSemesterDisplaysUpcomingAndOverdueAssessments() {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launch()
+        app.tabBars.buttons["Guide"].tap()
+        let examples = app.buttons["loadExamples"]
+        app.swipeUp()
+        if examples.isEnabled { examples.tap() }
+        else { app.tabBars.buttons["Deadlines"].tap() }
+        XCTAssertTrue(app.staticTexts["Research proposal"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Overdue"].exists)
+        XCTAssertTrue(app.staticTexts["Prototype review"].exists)
+        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        screenshot.name = "Example semester with overdue and upcoming work"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+    }
+
     func testStudentCanPlanAnAssessmentRelaunchAndRecordSubmission() throws {
         let app = XCUIApplication()
+        continueAfterFailure = false
         app.launch()
         let suffix = String(UUID().uuidString.prefix(6))
         app.tabBars.buttons["Subjects"].tap()
@@ -17,8 +36,9 @@ final class StudyDockWorkflowTests: XCTestCase {
         let nextStep = app.textViews["nextStep"]
         if nextStep.exists { nextStep.tap(); nextStep.typeText("Read the assignment brief") }
         else { app.textFields["nextStep"].tap(); app.textFields["nextStep"].typeText("Read the assignment brief") }
-        app.swipeDown()
-        app.switches["confirmDeadline"].tap()
+        let confirmation = app.buttons["confirmDeadline"]
+        confirmation.tap()
+        XCTAssertEqual(confirmation.value as? String, "Confirmed", "The student explicitly confirmed the deadline")
         app.buttons["saveAssessment"].tap()
         XCTAssertTrue(app.staticTexts["UI assessment " + suffix].waitForExistence(timeout: 5))
         app.terminate(); app.launch()

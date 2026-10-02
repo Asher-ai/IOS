@@ -135,6 +135,7 @@ struct AddSubjectView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var code = ""
     @State private var name = ""
+    @State private var formError: String?
     var body: some View {
         Form {
             Section("From your subject outline") {
@@ -143,9 +144,10 @@ struct AddSubjectView: View {
             }
             Section { Text("Each assessment belongs to one subject. Subject codes must be unique in your planner.").font(.footnote).foregroundStyle(.secondary) }
         }.navigationTitle("Add subject").navigationBarTitleDisplayMode(.inline)
+            .plannerFormError($formError)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
-                ToolbarItem(placement: .confirmationAction) { Button("Save") { if model.registerSubject(code: code, name: name) { dismiss() } }.accessibilityIdentifier("saveSubject") }
+                ToolbarItem(placement: .confirmationAction) { Button("Save") { if model.registerSubject(code: code, name: name) { dismiss() } else { formError = model.message; model.message = nil } }.accessibilityIdentifier("saveSubject") }
             }
     }
 }
@@ -183,6 +185,7 @@ struct PlanAssessmentView: View {
     @State private var sourceURL = ""
     @State private var confirmed = false
     @State private var addingSubject = false
+    @State private var formError: String?
     var body: some View {
         Form {
             if reference != nil {
@@ -199,7 +202,7 @@ struct PlanAssessmentView: View {
             Section {
                 DatePicker("Due date & time", selection: $dueAt)
                 Text("Time zone: \(TimeZone.current.identifier)").font(.caption).foregroundStyle(.secondary)
-                Toggle("I checked the official deadline", isOn: $confirmed).accessibilityIdentifier("confirmDeadline")
+                Button { confirmed.toggle() } label: { Label(confirmed ? "Official deadline checked" : "Confirm the official deadline", systemImage: confirmed ? "checkmark.circle.fill" : "circle") }.accessibilityIdentifier("confirmDeadline").accessibilityValue(confirmed ? "Confirmed" : "Not confirmed")
             } header: { Text("Confirmed deadline") } footer: { Text("Enter the equivalent time in the time zone shown. Past deadlines are allowed so overdue work stays visible.") }
             Section("Make it actionable") {
                 TextField("Next step, e.g. read the marking criteria", text: $nextStep, axis: .vertical).accessibilityIdentifier("nextStep")
@@ -210,13 +213,15 @@ struct PlanAssessmentView: View {
                 if SharedLinkValidation.isWebURL(sourceURL), let url = URL(string: sourceURL) { Link("Check the assignment page", destination: url) }
             }
         }.navigationTitle(reference == nil ? "Plan assessment" : "Review shared reference").navigationBarTitleDisplayMode(.inline)
+            .plannerFormError($formError)
+            .interactiveDismissDisabled()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) { Button("Save") {
                     let draft = AssessmentDraft(subjectID: subjectID ?? UUID(), title: title, dueAt: dueAt,
                         timeZoneID: TimeZone.current.identifier, nextStep: nextStep, notes: notes, sourceURL: sourceURL,
                         deadlineConfirmed: confirmed, capturedReferenceID: reference?.id)
-                    if model.plan(draft) { dismiss() }
+                    if model.plan(draft) { dismiss() } else { formError = model.message; model.message = nil }
                 }.accessibilityIdentifier("saveAssessment") }
             }
             .onAppear {
@@ -274,6 +279,7 @@ struct ReviseAssessmentView: View {
     @State private var nextStep: String
     @State private var notes: String
     @State private var confirmed = false
+    @State private var formError: String?
     init(model: StudyPlannerViewModel, plan: AssessmentPlan) {
         self.model = model; self.plan = plan
         _dueAt = State(initialValue: plan.dueAt); _nextStep = State(initialValue: plan.nextStep); _notes = State(initialValue: plan.notes)
@@ -289,10 +295,12 @@ struct ReviseAssessmentView: View {
                 TextField("Study notes", text: $notes, axis: .vertical).lineLimit(3...8)
             }
         }.navigationTitle("Update study plan").navigationBarTitleDisplayMode(.inline)
+            .plannerFormError($formError)
+            .interactiveDismissDisabled()
             .onChange(of: dueAt) { _, _ in confirmed = false }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
-                ToolbarItem(placement: .confirmationAction) { Button("Save") { if model.revise(id: plan.id, dueAt: dueAt, nextStep: nextStep, notes: notes, confirmed: confirmed) { dismiss() } } }
+                ToolbarItem(placement: .confirmationAction) { Button("Save") { if model.revise(id: plan.id, dueAt: dueAt, nextStep: nextStep, notes: notes, confirmed: confirmed) { dismiss() } else { formError = model.message; model.message = nil } } }
             }
     }
 }
@@ -347,5 +355,13 @@ struct PlannerGuideView: View {
             }
             Section("About") { Text("StudyDock · Assessment 3\nAn independent iOS platform integration project.").font(.footnote) }
         }.navigationTitle("Planner guide")
+    }
+}
+
+private extension View {
+    func plannerFormError(_ error: Binding<String?>) -> some View {
+        alert("Check this assessment", isPresented: Binding(get: { error.wrappedValue != nil }, set: { if !$0 { error.wrappedValue = nil } })) {
+            Button("OK", role: .cancel) { error.wrappedValue = nil }
+        } message: { Text(error.wrappedValue ?? "") }
     }
 }
