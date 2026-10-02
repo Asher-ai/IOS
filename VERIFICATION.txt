@@ -1,0 +1,38 @@
+STUDYDOCK - VERIFICATION RECORD
+Date: 2 October 2026
+Environment: Xcode 27.0 (27A266a); iPhone 17 Pro simulator; iOS 26.5.
+All simulator data was created for this assessment review.
+
+PASSED
+- App and both extension targets compile and install together.
+- Release configuration also compiles successfully for the generic physical iOS target (unsigned; not a device runtime test).
+- 26 mock-repository unit tests: 0 failures. Tests do not open Core Data.
+- UI test: register subject -> plan assessment -> terminate/relaunch -> record submission.
+- UI test: example semester displays both overdue and upcoming assessments.
+- Shared App Group snapshot contains actual persisted assessment IDs, deadlines and next steps.
+- Safari system share sheet displays StudyDock.
+- Share Extension opens and reads the URL and page title.
+- Cancel returns to the host share sheet without writing the edited capture.
+- Save reference closes the Share Extension and returns to Safari.
+- UI test passed: actual UTS page shared from Safari -> review/confirm -> Core Data assessment -> inbox cleared. No skipped test in this verification run.
+- Small and medium Home Screen widgets display actual saved records.
+- Tapping the small widget cold-launches the corresponding Research proposal detail.
+- UI test passed: submit the overdue example and verify it stays out of the active list after relaunch.
+- Both installed widgets visibly refreshed to Prototype review after submission (see before/after screenshots).
+- Total: 26 passing mock unit tests and 4 individually executed passing UI scenarios. No skips in the reported scenario runs.
+
+REPRODUCING THE CHECKS
+1. Use a dedicated simulator. Run StudyDock scheme's unit tests.
+2. The StudyDockIntegration scheme contains UI scenarios. The example scenario
+   expects an empty planner, or a planner already containing the example semester.
+3. The Safari import scenario requires one URL previously shared from Safari.
+   It explicitly skips if that capture is absent; a skipped test is not a pass.
+4. Test small and medium widgets with persisted example data; mark an assessment
+   submitted and observe its removal when iOS reloads the widget timeline.
+5. Inspect the Evidence folder for real simulator screenshots, not design mockups.
+
+LIMITS
+- No physical-device, older-iOS, VoiceOver user-study, CloudKit or reinstall-recovery test.
+- Device signing requires the student's Apple team and an App Group available to it.
+- Widgets are scheduled by iOS and do not promise instantaneous refresh.
+- No university login, actual assignment submission or student outcome study performed.
